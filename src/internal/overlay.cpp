@@ -11,8 +11,6 @@
 #include <d3d11.h>
 #include <dxgi1_4.h>
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
-
 namespace kx {
 namespace {
 
@@ -40,7 +38,7 @@ void ShutdownImGui() {
 }
 
 void HookWindow(HWND hwnd) {
-    g_wndproc.install(hwnd, ImGui_ImplWin32_WndProcHandler);
+    g_wndproc.install(hwnd);
 }
 
 void ReleaseRtv() {
@@ -91,14 +89,18 @@ void RenderFrame(IDXGISwapChain* swapChain) {
     if (!EnsureRtv(swapChain))
         return;
 
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
     PollMenuToggle();
     g_wndproc.setMenuVisible(g_showMenu);
     g_wndproc.setImGuiReady(true);
+
+    g_wndproc.drainInput();
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+    g_wndproc.applyDeferredInput();
+
     App_DrawUi(&g_showMenu);
+    g_wndproc.publishCapture();
 
     ImGui::Render();
 
