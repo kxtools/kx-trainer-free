@@ -31,7 +31,8 @@ We welcome contributions! Pull requests for **bug fixes**, **compatibility updat
 KX Trainer Free is a C++ project for Windows. It injects into Guild Wars 2 as a DLL and draws an in-game menu overlay.
 
 ### Prerequisites
-- **Visual Studio 2026** with **Desktop development with C++**, or **Build Tools 2026** with **C++ build tools** (MSVC **v145** toolset).
+- **CMake 3.28+** and **Ninja**
+- **Visual Studio 2026** with **Desktop development with C++**, or **Build Tools 2026** with **C++ build tools** (MSVC **v145** toolset)
 
 ### Build Instructions
 
@@ -41,11 +42,13 @@ KX Trainer Free is a C++ project for Windows. It injects into Guild Wars 2 as a 
     git clone https://github.com/Krixx1337/KX-Trainer-Free.git
     ```
 
-2.  **Build**:
-    *   Open `KX-Trainer-Free.sln` in Visual Studio, select **Release | x64**, and build the solution (`Ctrl+Shift+B`), **or**
-    *   Run `build.bat` from the repository root (Release x64).
+2.  **Build** from the repository root:
+    ```bash
+    cmake --preset release
+    cmake --build --preset release
+    ```
 
-    Outputs are written to `bin/Release/` (`KX-Trainer-Free.dll` and `KXTrainerInject.exe`).
+    Outputs are written to `bin/Release/` (`KX-Trainer-Free.dll` and `KXTrainerInject.exe`). Use `--preset debug` for a Debug build (`bin/Debug/`).
 
 ### Running
 
